@@ -12,35 +12,40 @@
     <div class='navbar-fixed hoverable'>
       <nav class='blue accent-3'>
         <!-- Logo -->
-        <div>
-          <a  href='#top' onclick='scrollToTop();return false' class="brand-logo">Afternoon Delight ☀️</a>
-        </div>
-        <!-- Metrics -->
-        <div class='right container'>
-          <div class='row'>
-            <form class='left col s12'>
-              <div class='row'>
-                <div class='input-field col s6'>
-                  <p>
-                    <i class='material-icons prefix'>add_location</i>
-                    <input style='width: 50%; border: 1px solid white;' type='text' name='address' id='address' placeholder="Enter address" class='validate' />
-                  </p>
-                </div>
-                <div class='right input-field col s6'>
-                  <label>Radius(mi)</label>
-                  <p class='range-field'>
-                    <input type='range' id='slider' min='0' max='10' />
-                  </p>
-                </div>
-              </div>
-            </form>
-          </div>
+        <div class='container'>
+          <a  href='#top' onclick='scrollToTop();return false' class="center brand-logo">Afternoon Delight ☀️</a>
         </div>
       </nav>
     </div>
 
-    <div style='float: left;'>
-      <form class='left col s6'>
+    <div class='center container' style='margin-top: 1%;'>
+      <!-- Metrics -->
+        <p class='center blue-text' id='directions'>Please enter in a starting location. Adjust your distance radius accordingly. Enjoy your afternoon!</p>
+        <div class='row'>
+          <form class='col s12'>
+            <div class='row'>
+              <div class='input-field col s6'>
+                <i class='material-icons prefix blue-text'>add_location</i>
+                <input type='text' name='address' id='address' placeholder="Enter address" class='validate'/>
+              </div>
+              <div class='input-field col s6'>
+                <p class='range-field'>
+                  <label for='slider'>Radius</label>
+                  <input type='range' id='slider' min='0' max='10' />
+                </p>
+              </div>
+            </div>
+            <div class='row center'>
+              <div class='col s12'>
+                <a id='submit' class='center btn-large waves-effect waves-light btn blue accent-3'>Afternoon Delight ☀️</a>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+
+    <div class='container' id='mapcontainer'>
+      <form class='center col s6'>
         <p>
           <input type='checkbox' id='garage' class='filled-in' onclick='removeMarkers(garageMakersArray)'/>
           <label for='garage'>Parking</label>
@@ -90,13 +95,23 @@
           </div>
         </p>
       </form>
-    </div>
-
-
-    <div class='container' id='mapcontainer'>
-      <p class='center blue-text' id='directions'>Please enter in a starting location. Adjust your distance radius accordingly. Enjoy your afternoon!</p>
       <div id='map'></div>
     </div>
+
+    <!-- <div class='container'>
+      <div class='row'>
+        <div class='center col s12'>
+          <p>
+          </p>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='center col s12'>
+          <p>
+          </p>
+        </div>
+      </div>
+    </div> -->
 
     <footer class='page-footer blue accent-3'>
       <div class='container'>

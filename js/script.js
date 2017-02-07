@@ -2,6 +2,7 @@ let cannaMarkersArray = [];
 let garageMakersArray = [];
 let parkMarkersArray = [];
 let foodMarkersArray = [];
+let beerMarkersArray = [];
 
 document.getElementById('canna').addEventListener('click', function() {
   if (document.getElementById('canna').checked) {
@@ -31,6 +32,11 @@ document.getElementById('food-truck').addEventListener('click', function() {
   }
 })
 
+document.getElementById('submit').addEventListener('click', function() {
+  let value = document.getElementById('address').value;
+  addressCenter(value);
+})
+
 document.getElementById('monday').addEventListener('click', function() {
   foodMarkersArray = [];
   if (document.getElementById('monday').checked) {
@@ -40,7 +46,7 @@ document.getElementById('monday').addEventListener('click', function() {
 
 document.getElementById('tuesday').addEventListener('click', function() {
   foodMarkersArray = [];
-  if (document.getElementById('tuesday').checkef) {
+  if (document.getElementById('tuesday').checked) {
     foodMarkers('Tuesday')
   }
 })
@@ -94,6 +100,7 @@ function foodMarkers(day) {
         var foodMarker = new google.maps.Marker({
           position: position,
           map: map,
+          icon: "img/foodtruck.png"
         })
         foodMarkersArray.push(foodMarker)
       }
@@ -113,6 +120,7 @@ function parkMarkers() {
         var parkMarker = new google.maps.Marker({
           position: position,
           map: map,
+          icon: 'img/walkingtour.png'
         })
         parkMarkersArray.push(parkMarker)
       }
@@ -131,6 +139,7 @@ function garageMarkers() {
       var garageMarker = new google.maps.Marker({
         position: position,
         map: map,
+        icon: "img/car.png"
       })
       garageMakersArray.push(garageMarker)
     })
@@ -148,7 +157,7 @@ function cannaMarkers() {
       var cannaMarker = new google.maps.Marker({
         position: position,
         map: map,
-        color: "green",
+        icon: 'img/tree.png',
       })
       cannaMarkersArray.push(cannaMarker)
     })
@@ -166,6 +175,19 @@ function initMap() {
     center: {lat: 37.78662965327916, lng: -122.41941327978273},
     zoom: 12
   });
+}
+
+function addressCenter(string) {
+  let api = `https://maps.googleapis.com/maps/api/geocode/json?address=${string}&key=DEMO_KEY`;
+  let position = {lat: 39, lng: -122}
+  getRemoteJsonUrl(api).then( (obj) => {
+    let position = {lat: obj.results[0].geometry.location.lat, lng: obj.results[0].geometry.location.lng}
+    map.setCenter(position)
+    map.setZoom(15)
+  })
+  .catch( (error) => {
+    console.log("Error Error! The address center API is sucking today!")
+  })
 }
 
 function removeMarkers(array) {

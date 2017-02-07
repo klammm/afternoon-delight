@@ -23,3 +23,8 @@ html, body {
 .show {
   display: block;
 }
+
+p {
+  display: inline;
+  margin: 5px;
+}
