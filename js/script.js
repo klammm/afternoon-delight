@@ -3,6 +3,8 @@ let garageMakersArray = [];
 let parkMarkersArray = [];
 let foodMarkersArray = [];
 let beerMarkersArray = [];
+let defaultMarkersArray = [];
+let circleArray = [];
 
 // checkboxes
 
@@ -261,33 +263,56 @@ document.getElementById('submit').addEventListener('click', function() {
   addressCenter(value)
 })
 
-function addressCenter(string) {
+
+
+function addressCenter(string, radius) {
   let api = `https://maps.googleapis.com/maps/api/geocode/json?address=${string}&key=${GMAPS_KEY}`;
   getRemoteJsonUrl(api).then( (obj) => {
-    let position = {lat: obj.results[0].geometry.location.lat, lng: obj.results[0].geometry.location.lng}
-    var defaultMarker = new google.maps.Marker({
-      position: position,
-      map: map,
-    })
-    let circle = new google.maps.Circle({
-      map: map,
-      radius: document.getElementById('slider').value * 100,    // 10 miles in metres
-      fillColor: '#AA0000'
-    });
-    circle.bindTo('center', defaultMarker, 'position')
+    if (circleArray.length === 0) {
+      let position = {lat: obj.results[0].geometry.location.lat, lng: obj.results[0].geometry.location.lng}
+      var defaultMarker = new google.maps.Marker({
+        position: position,
+        map: map,
+      })
+      var circle = new google.maps.Circle({
+        map: map,
+        radius: document.getElementById('slider').value * 100,    // 10 miles in metres
+        fillColor: '#AA0000'
+      });
+
+      let slider = document.getElementById('slider');
+
+      slider.addEventListener('input', function() {
+        let radiusValue = slider.value;
+        circle.setRadius(radiusValue * 100)
+      })
+
+      circleArray.push(circle)
+      defaultMarkersArray.push(defaultMarker)
+      circle.bindTo('center', defaultMarker, 'position')
+      map.setCenter(position)
+      map.setZoom(15)
+    } else {
+      removeMarkers(circleArray)
+      removeMarkers(defaultMarkersArray)
+      circleArray = []
+      defaultMarkersArray = []
+    }
     var contentString = "<h6>" + obj.results[0].formatted_address + "</h6>";
     var infowindow = new google.maps.InfoWindow({
       content: contentString,
       maxWidth: 300,
     })
+
     defaultMarker.addListener('click', function() {
       infowindow.open(map, defaultMarker)
     })
+
     google.maps.event.addListener(map, 'mousemove', function (event) {
       infowindow.close();
     });
-    map.setCenter(position)
-    map.setZoom(15)
+
+
   })
   .catch( (error) => {
     console.log("Error Error! The address center API is sucking today!")
