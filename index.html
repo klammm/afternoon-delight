@@ -22,7 +22,7 @@
       <!-- Metrics -->
         <p class='center blue-text' id='directions'>Please enter in a starting location. Adjust your distance radius accordingly. Enjoy your afternoon!</p>
         <div class='row'>
-          <form class='col s12'>
+          <form class='col s12' id='address-form' action='' method='get' onsubmit="event.preventDefault();">
             <div class='row'>
               <div class='input-field col s6'>
                 <i class='material-icons prefix blue-text'>add_location</i>
@@ -40,6 +40,7 @@
                 <a id='submit' class='center btn-large waves-effect waves-light btn blue accent-3'>Afternoon Delight ☀️</a>
               </div>
             </div>
+            <input type="submit" style="display:none"/>
           </form>
         </div>
     </div>
@@ -57,6 +58,10 @@
         <p>
           <input type='checkbox' id='open-space' class='filled-in' onclick='removeMarkers(parkMarkersArray)'/>
           <label for='open-space'>Public Open Space</label>
+        </p>
+        <p>
+          <input type='checkbox' id='beer' class='filled-in' onclick='removeMarkers(beerMarkersArray)' />
+          <label for='beer'>Breweries</label>
         </p>
         <p>
           <input type='checkbox' id='food-truck' class='filled-in' onclick='removeMarkers(foodMarkersArray)'/>
@@ -130,7 +135,19 @@
 
     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=DEMO_KEY&callback=initMap" type="text/javascript"></script>
+    <script src="config.js"></script>
+    <script>
+     function loadScript() {
+       var script = document.createElement('script');
+       script.type = 'text/javascript';
+       script.src = 'https://maps.googleapis.com/maps/api/js?' +
+       'key=' + GMAPS_KEY +'&callback=initMap';
+       script.async = true;
+       script.defer = true;
+       document.body.appendChild(script);
+     }
+     window.onload = loadScript;
+    </script>
     <script src='js/script.js'></script>
   </body>
 </html>
