@@ -6,13 +6,11 @@ let beerMarkersArray = [];
 let defaultMarkersArray = [];
 let circleArray = [];
 
-// checkboxes
-
-checkboxClick('canna', cannaMarkers)
-checkboxClick('garage', garageMarkers)
-checkboxClick('open-space', parkMarkers)
-checkboxClick('food-truck')
-checkboxClick('beer', beerMarkers)
+checkboxClick('canna', cannaMarkers);
+checkboxClick('garage', garageMarkers);
+checkboxClick('open-space', parkMarkers);
+checkboxClick('food-truck');
+checkboxClick('beer', beerMarkers);
 
 function checkboxClick(id, funct) {
   if (id === 'food-truck') {
@@ -57,36 +55,37 @@ function getRemoteJsonUrl(url) {
   return fetch(url).then( (prom) => prom.json())
 }
 
+// Beer mapping API
+
 function beerMarkers() {
-  const api = 'https://public-us.opendatasoft.com/api/records/1.0/search/?dataset=open-beer-database&q=san+francisco&facet=style_name&facet=cat_name&facet=name_breweries&facet=country';
-  let array = [];
-  getRemoteJsonUrl(api).then( (obj) => {
-    obj.records.forEach( (element) => {
-      if (array.indexOf(element.fields.name_breweries) === -1) {
-        let position = {lat: element.fields.coordinates[0], lng: element.fields.coordinates[1]};
-        var beerMarker = new google.maps.Marker({
-          position: position,
-          map: map,
-          icon: 'img/bar.png'
-        })
-        if (!!element.fields.address1) {
-          var contentString = "<h6><strong>" + element.fields.name_breweries + "</strong></h6><p>Address: " + element.fields.address1 + "</p>"
-        } else {
-          var contentString = "<h6><strong>" + element.fields.name_breweries + "</strong></h6><p>Address: Not Found</p>"
-        }
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-        beerMarker.addListener('click', function() {
-          infowindow.open(map, beerMarker);
-        });
-        google.maps.event.addListener(map, 'mousemove', function (event) {
-          infowindow.close();
-        });
-        beerMarkersArray.push(beerMarker)
-        array.push(element.fields.name_breweries)
-      }
+  const beer_api = `http://beermapping.com/webservice/loccity/${BEERMAP_KEY}/san+francisco,ca&s=json`;
+  getRemoteJsonUrl(beer_api).then( (array) => {
+    array.forEach( (obj) => {
+      let x = obj.name + " " + obj.street + " San Francisco, CA";
+      const gmaps_api = `https://maps.googleapis.com/maps/api/geocode/json?address=${x}&key=${GMAPS_KEY}`;
+      let contentString = "<h6>" + obj.name + "</h6><p>" + obj.status + "</p><br><p>Address: "
+      + obj.street + "</p><br><p>Phone #: " + obj.phone + "</p><br><p>Website: " + obj.url + "</p>"
+      let position;
+      let beerMarker;
+      getRemoteJsonUrl(gmaps_api).then((object) => {
+          if (object.results.length > 0) {
+            position = {lat: object.results[0].geometry.location.lat, lng: object.results[0].geometry.location.lng}
+          }
+          beerMarker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: 'img/bar.png'
+          })
+          google.maps.event.addListener(beerMarker, 'click', function() {
+             infowindow.setContent(contentString);
+             infowindow.open(map, this);
+          });
+          beerMarkersArray.push(beerMarker)
+      })
     })
+  })
+  .catch( (error) => {
+    console.log("Error Error! The Beer Mapping API sucks today!")
   })
 }
 
@@ -104,15 +103,10 @@ function foodMarkers(day) {
         let contentString = "<h6><strong>" + element.applicant + "</strong></h6>" + "<p>Hours: " + element.starttime + " - "
         + element.endtime + "</p><p>Address: " + element.location + "</p><br><br><p>Location Description: "
         + element.locationdesc + "</p><br><br><p>" + element.optionaltext + "</p>";
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString,
-          maxWidth: 400
-        });
-        foodMarker.addListener('click', function() {
-          infowindow.open(map, foodMarker)
-        })
-        google.maps.event.addListener(map, 'mousemove', function (event) {
-          infowindow.close();
+        google.maps.event.addListener(foodMarker, 'click', function() {
+           infowindow.setContent(contentString);
+           infowindow.setOptions({maxWidth:400});
+           infowindow.open(map, this);
         });
         foodMarkersArray.push(foodMarker)
       }
@@ -136,15 +130,10 @@ function parkMarkers() {
         })
         let contentString = "<h6><strong>" + element.parkname + "</strong></h6><p>Park Manager: "
         + element.psamanager + "</p><br><p>Phone #: " + element.number + "</p><p>Email: " + element.email + "</p>";
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString,
-          maxWidth: 400
-        })
-        parkMarker.addListener('click', function() {
-          infowindow.open(map, parkMarker)
-        })
-        google.maps.event.addListener(map, 'mousemove', function (event) {
-          infowindow.close();
+        google.maps.event.addListener(parkMarker, 'click', function() {
+           infowindow.setContent(contentString);
+           infowindow.setOptions({maxWidth:400});
+           infowindow.open(map, this);
         });
         parkMarkersArray.push(parkMarker)
       }
@@ -182,15 +171,10 @@ function garageMarkers() {
       } else {
         contentString += "<br><p>Type: Lot</p>"
       }
-      var infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        maxWidth: 400
-      })
-      garageMarker.addListener('click', function() {
-        infowindow.open(map, garageMarker)
-      })
-      google.maps.event.addListener(map, 'mousemove', function (event) {
-        infowindow.close();
+      google.maps.event.addListener(garageMarker, 'click', function() {
+         infowindow.setContent(contentString);
+         infowindow.setOptions({maxWidth:400});
+         infowindow.open(map, this);
       });
       garageMakersArray.push(garageMarker)
     })
@@ -210,20 +194,15 @@ function cannaMarkers() {
         map: map,
         icon: 'img/tree.png',
       })
+      cannaMarkersArray.push(cannaMarker)
       let contentString = "<h6>" + element.business_n + "</h6><p>Address: " + element.business_a
       + "</p><br><p>Location type: " + element.location_t  + "</p><br><p>Neighborhood: "
       + element.neighborho + "</p>";
-      let infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        maxWidth: 400
-      })
-      cannaMarker.addListener('click', function() {
-        infowindow.open(map, cannaMarker)
-      })
-      google.maps.event.addListener(map, 'mousemove', function (event) {
-        infowindow.close();
+      google.maps.event.addListener(cannaMarker, 'click', function() {
+         infowindow.setContent(contentString);
+         infowindow.setOptions({maxWidth:400});
+         infowindow.open(map, this);
       });
-      cannaMarkersArray.push(cannaMarker)
     })
   })
   .catch( (error) => {
@@ -231,13 +210,17 @@ function cannaMarkers() {
   })
 }
 
-
 // google maps API manipulation
 var map;
+var infowindow;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.78662965327916, lng: -122.41941327978273},
     zoom: 12
+  });
+  infowindow = new google.maps.InfoWindow();
+  google.maps.event.addListener(map, 'mousemove', function (event) {
+    infowindow.close();
   });
 }
 
@@ -245,9 +228,12 @@ function removeMarkers(array) {
   array.forEach( (element) => {
     element.getMap() !== null ? element.setMap(null) : element.setMap(map)
   })
+  if (array.length !== 0) {
+    while (array.length > 0) {
+      array.pop()
+    }
+  }
 }
-
-// metrics manipulation
 
 document.getElementById('address').onkeydown = function(e){
   if(e.keyCode == 13 || event.which == 13){
@@ -263,8 +249,6 @@ document.getElementById('submit').addEventListener('click', function() {
   addressCenter(value)
 })
 
-
-
 function addressCenter(string, radius) {
   let api = `https://maps.googleapis.com/maps/api/geocode/json?address=${string}&key=${GMAPS_KEY}`;
   getRemoteJsonUrl(api).then( (obj) => {
@@ -276,7 +260,7 @@ function addressCenter(string, radius) {
       })
       var circle = new google.maps.Circle({
         map: map,
-        radius: document.getElementById('slider').value * 100,    // 10 miles in metres
+        radius: document.getElementById('slider').value * 100,
         fillColor: '#AA0000'
       });
 
@@ -290,8 +274,12 @@ function addressCenter(string, radius) {
       circleArray.push(circle)
       defaultMarkersArray.push(defaultMarker)
       circle.bindTo('center', defaultMarker, 'position')
+      defaultMarker.addListener('click', function() {
+        infowindow.open(map, defaultMarker)
+      })
+
       map.setCenter(position)
-      map.setZoom(15)
+      map.setZoom(17)
     } else {
       removeMarkers(circleArray)
       removeMarkers(defaultMarkersArray)
@@ -304,23 +292,14 @@ function addressCenter(string, radius) {
       maxWidth: 300,
     })
 
-    defaultMarker.addListener('click', function() {
-      infowindow.open(map, defaultMarker)
-    })
-
     google.maps.event.addListener(map, 'mousemove', function (event) {
       infowindow.close();
     });
-
-
   })
   .catch( (error) => {
     console.log("Error Error! The address center API is sucking today!")
   })
 }
-
-// Distance Radius
-
 
 
 // smooth scroll to the top. found via: https://gist.github.com/ricardozea/abb9f98a19f6d04a0269
@@ -332,3 +311,12 @@ function scrollToTop() {
 	}
 	else clearTimeout(timeOut);
 }
+
+// music functionality
+document.getElementById('play').addEventListener('click', function() {
+  document.getElementById('music').play()
+})
+
+document.getElementById('pause').addEventListener('click', function() {
+  document.getElementById('music').pause()
+})
