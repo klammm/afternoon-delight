@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Afternoon Delight</title>
+    <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <link rel='stylesheet' type="text/css" href='css/style.css'>
+  </head>
+  <body id='top'>
+    <div class='navbar-fixed hoverable'>
+      <nav class='blue accent-3'>
+        <!-- Logo -->
+        <div class='container'>
+          <a  href='#top' onclick='scrollToTop();return false' class="center brand-logo">Afternoon Delight ☀️</a>
+          <button id='play'><i class='material-icons'>play_arrow</i></button>
+          <button id='pause'><i class='material-icons'>pause</i></button>
+          <audio id='music' autoplay loop src="Starland vocal band.mp3">
+          Your user agent does not support the HTML5 Audio element.
+          </audio>
+        </div>
+      </nav>
+    </div>
+
+    <div class='center container' style='margin-top: 1%;'>
+      <!-- Metrics -->
+        <p class='center blue-text' id='directions'>Please enter in a starting location. Adjust your distance radius accordingly. Enjoy your afternoon!</p>
+        <div class='row'>
+          <form class='col s12' id='address-form' action='' method='get' onsubmit="event.preventDefault();">
+            <div class='row'>
+              <div class='input-field col s6'>
+                <i class='material-icons prefix blue-text'>add_location</i>
+                <input type='text' name='address' id='address' placeholder="Enter address" class='validate'/>
+              </div>
+              <div class='input-field col s6'>
+                <p class='range-field'>
+                  <label for='slider'>Radius</label>
+                  <input type='range' id='slider' value='2' min='0' max='20'/>
+                </p>
+              </div>
+            </div>
+            <div class='row center'>
+              <div class='col s12'>
+                <a id='submit' class='center btn-large waves-effect waves-light btn blue accent-3'>Afternoon Delight ☀️</a>
+              </div>
+            </div>
+            <input type="submit" style="display:none"/>
+          </form>
+        </div>
+    </div>
+
+    <div class='container' id='mapcontainer'>
+      <form class='center col s6'>
+        <p>
+          <input type='checkbox' id='garage' class='filled-in' onclick='removeMarkers(garageMakersArray)'/>
+          <label for='garage'><img src='img/car.png'/>Parking</label>
+        </p>
+        <p>
+          <input type='checkbox' id='canna' class='filled-in' onclick='removeMarkers(cannaMarkersArray)'/>
+          <label for='canna'><img src='img/tree.png'/>Dispensaries</label>
+        </p>
+        <p>
+          <input type='checkbox' id='open-space' class='filled-in' onclick='removeMarkers(parkMarkersArray)'/>
+          <label for='open-space'><img src='img/walkingtour.png'/>Public Open Space</label>
+        </p>
+        <p>
+          <input type='checkbox' id='beer' class='filled-in' onclick='removeMarkers(beerMarkersArray)' />
+          <label for='beer'><img src='img/bar.png'/>Breweries</label>
+        </p>
+        <p>
+          <input type='checkbox' id='food-truck' class='filled-in'/>
+          <label for='food-truck'><img src='img/foodtruck.png'/>Food Truck</label>
+          <div id='week' class='hide'>
+            <form>
+              <p>
+                <input type='radio' name='day-of-the-week' id='monday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='monday'>Monday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='tuesday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='tuesday'>Tuesday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='wednesday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='wednesday'>Wednesday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='thursday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='thursday'>Thursday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='friday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='friday'>Friday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='saturday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='saturday'>Saturday</label>
+              </p>
+              <p>
+                <input type='radio' name='day-of-the-week' id='sunday' onclick='removeMarkers(foodMarkersArray)'>
+                <label for='sunday'>Sunday</label>
+              </p>
+            </form>
+          </div>
+        </p>
+      </form>
+      <div id='map'></div>
+    </div>
+
+    <footer class='page-footer blue accent-3'>
+      <div class='container'>
+        <div class='row'>
+          <div class='col s6'>
+            <h5 class='white-text'>Afternoon Delight ☀️</h5>
+          </div>
+          <div class='white-text center col s6'>
+            Made by yours truly, K.Lam.
+            <br>
+            <a href="https://www.linkedin.com/in/klam1993" target="_blank"><img height="50" width="50" src="http://image.flaticon.com/icons/svg/145/145807.svg" /></a>
+            <a href="https://github.com/smokymcbear" target="_blank"><img height="50" width="50" src="http://image.flaticon.com/icons/svg/25/25231.svg" /></a>
+          </div>
+        </div>
+        <div class='row'>
+          <div class='col s6'>
+            <p class='white-text'>
+              Sources:
+                <li class='white-text'><a class='orange-text' href="https://data.sfgov.org/">SF Open Data</a></li>
+                <li class='white-text'><a class='yellow-text' href='https://beermapping.com/'>Beer Mapping 🍺</a></li>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class='footer-copyright'>
+        <div class='container'>
+          © 2017 K.Lam
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+    <script src="config.js"></script>
+    <script>
+     function loadScript() {
+       var script = document.createElement('script');
+       script.type = 'text/javascript';
+       script.src = 'http://maps.googleapis.com/maps/api/js?' +
+       'key=' + GMAPS_KEY +'&callback=initMap';
+       script.async = true;
+       script.defer = true;
+       document.body.appendChild(script);
+     }
+     window.onload = loadScript;
+    </script>
+    <script src='js/script.js'></script>
+  </body>
+</html>
