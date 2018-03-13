@@ -6,9 +6,8 @@ That way, you can enjoy a nice Saturday afternoon.
 
 P.S. This application is usable for *any* afternoon.
 
-### Developer Guidelines
+### How to Contribute
 
-##### Git workflow
+Check out the [React Table of Contents](https://github.com/klammm/afternoon-delight/blob/master/docs/create-react-app.md). These `create-react-app` auto-generated docs help from everything to development to deployment.
 
-- Fork this repository and clone it
-- Run `git pull upstream master --rebase` whenever you want to pull down the latest changes
+Next check out the guide to the [Git workflow](https://github.com/klammm/afternoon-delight/blob/master/docs/git-workflow.md)
