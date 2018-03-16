@@ -10,4 +10,6 @@ P.S. This application is usable for *any* afternoon.
 
 Check out the [React Table of Contents](https://github.com/klammm/afternoon-delight/blob/master/docs/create-react-app.md). These `create-react-app` auto-generated docs help from everything to development to deployment.
 
-Next check out the guide to the [Git workflow](https://github.com/klammm/afternoon-delight/blob/master/docs/git-workflow.md)
+Next check out this guide to our [Git workflow](https://github.com/klammm/afternoon-delight/blob/master/docs/git-workflow.md)
+
+Check out our guide on [CSS styling](https://github.com/klammm/afternoon-delight/blob/master/docs/style-guide.md) too.
