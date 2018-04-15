@@ -8,6 +8,8 @@ import Map from "./components/map";
 
 class App extends Component {
   render() {
+    require("dotenv").config();
+    
     return (
       <div className="App">
         <header className="App-header">

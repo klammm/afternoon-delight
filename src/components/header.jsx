@@ -8,6 +8,9 @@ class Header extends Component {
       <nav className="Header">
         <div className="Header-wrapper">
           Header
+          <CheckboxItem>
+            Checkbox Item within Header
+          </CheckboxItem>
         </div>
       </nav>
     )

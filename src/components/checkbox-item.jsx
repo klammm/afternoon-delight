@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 
 const CheckboxItem = ({ children, name, checkboxId }) => (
   <div className="CheckboxItem">
